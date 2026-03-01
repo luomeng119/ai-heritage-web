@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Navigation } from "@/components/navigation";
 
 export const metadata: Metadata = {
-  title: "AI非遗工坊 - 用科技传承文化",
-  description: "AI+非物质文化遗产体验平台，让传统艺术在数字时代焕发新生",
+  title: "档案AI共学社 - AI赋能非物质文化遗产",
+  description: "用人工智能守护和传承中华优秀传统文化，让非遗知识触手可及。",
 };
 
 export default function RootLayout({
@@ -13,7 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body className="antialiased font-sans">
+      <body className="antialiased">
+        <Navigation />
         {children}
       </body>
     </html>

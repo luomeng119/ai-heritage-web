@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 非遗项目表
+model HeritageItem {
+  id          String   @id @default(cuid())
+  name        String   // 项目名称
+  category    String   // 十大门类
+  region      String   // 所属地区
+  level       String   // 级别：国家级/省级/市级
+  batch       Int      // 第几批名录（1-5）
+  code        String?  // 项目编号（如 Ⅶ-16）
+  
+  // 内容字段
+  summary     String   // 一句话简介
+  description String   // 详细介绍
+  history     String?  // 历史渊源
+  technique   String?  // 技艺特点
+  inheritance String?  // 传承谱系
+  value       String?  // 文化价值
+  
+  // 媒体
+  images      String?  // 图片URL数组（JSON）
+  video       String?  // 视频URL
+  
+  // 关联
+  tags        Tag[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([category])
+  @@index([region])
+  @@index([name])
+}
+
+// 标签表
+model Tag {
+  id       String       @id @default(cuid())
+  name     String       @unique
+  items    HeritageItem[]
+}
+
+// 对话历史
+model ChatHistory {
+  id        String   @id @default(cuid())
+  sessionId String   // 会话ID
+  messages  String   // 消息JSON
+  model     String   // 使用的模型
+  createdAt DateTime @default(now())
+  
+  @@index([sessionId])
+}
+
+// 知识问答记录
+model KnowledgeQA {
+  id        String   @id @default(cuid())
+  question  String   // 用户问题
+  answer    String   // AI回答
+  relatedItems String? // 关联的非遗项目ID（JSON数组）
+  helpful   Boolean? // 是否有帮助（用户反馈）
+  createdAt DateTime @default(now())
+}
